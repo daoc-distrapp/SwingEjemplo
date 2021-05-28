@@ -1,9 +1,10 @@
 package swing_ej;
 
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -11,14 +12,17 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
-public class Main {
-	static final JLabel label = new JLabel("Hola Mundo !!!");;
+@SuppressWarnings("serial")
+public class Main extends JFrame {
+	
+	JLabel label = new JLabel("Hola Mundo !!!");;
 	
     public static void main(String[] args) {
+    	final Main frame = new Main();
         //Agenda la ejecución de esta tarea en la event-dispatching thread (EDT)
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                createAndShowGUI();
+                frame.createAndShowGUI();
             }
         });
     }
@@ -27,16 +31,14 @@ public class Main {
      * Presenta la GUI
      * Debe ejecutarse en la EDT
      */
-    private static void createAndShowGUI() {
-        //Crea y setea la ventana
-        JFrame frame = new JFrame("Hola Mundo Swing");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        JPanel contentPane = new JPanel();
-        contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
-        frame.setContentPane(contentPane);
+    private void createAndShowGUI() {
+        this.setTitle("Hola Mundo Swing");
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        JPanel content = new JPanel(new GridLayout(0, 1));
+        this.add(content, BorderLayout.CENTER);
  
         //Añade la etiqueta
-        frame.add(label);
+        content.add(label);
  
         //Añade botones
         JButton buttonR = new JButton("Rápido");
@@ -45,19 +47,21 @@ public class Main {
 				label.setText("Acción rápida");
 			}
 		});
-        frame.add(buttonR);
+        content.add(buttonR);
         
-        JButton buttonL = new JButton("Lento");
+        JButton buttonL = new JButton("Lento Worker");
         buttonL.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				worker.execute();
+				label.setText("Espere...");
+				new MyWorker().execute();
 			}
 		});
-        frame.add(buttonL);        
+        content.add(buttonL);        
         
-        JButton buttonT = new JButton("Thread");
+        JButton buttonT = new JButton("Lento Thread");
         buttonT.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				label.setText("Espere...");
 				new Thread() {
 					@Override
 					public void run() {
@@ -75,31 +79,31 @@ public class Main {
 				}.start();
 			}
 		});
-        frame.add(buttonT);          
+        content.add(buttonT);          
         
         //Presenta la ventana
-        frame.pack();
-        frame.setVisible(true);
+        this.pack();
+        this.setVisible(true);
     }
 
     /*
      * Nueva thread Swing, para acciones largas.
      * Evita que se atore la GUI y deje de responder
      */
-    static SwingWorker<String, Void> worker = new SwingWorker<String, Void>() {
+    private class MyWorker extends SwingWorker<String, Void> {
 		@Override
 		protected String doInBackground() throws Exception {
 			Thread.sleep(3000);
-			return "Acción lenta !!!";
+			return "Acción por Worker!!!";
 		}
-		
+		@Override
 		protected void done() {
 			try {
 				label.setText(get());
 			} catch (Exception e) {
 				e.printStackTrace();
 			} 
-		};
-    };
+		}  	
+    }
     
 }
