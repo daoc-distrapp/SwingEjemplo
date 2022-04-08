@@ -19,7 +19,7 @@ public class Main extends JFrame {
 	
     public static void main(String[] args) {
     	final Main frame = new Main();
-        //Agenda la ejecuci髇 de esta tarea en la event-dispatching thread (EDT)
+        //Agenda la ejecuci贸n de esta tarea en la event-dispatching thread (EDT)
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 frame.createAndShowGUI();
@@ -37,14 +37,14 @@ public class Main extends JFrame {
         JPanel content = new JPanel(new GridLayout(0, 1));
         this.add(content, BorderLayout.CENTER);
  
-        //A馻de la etiqueta
+        //A帽ade la etiqueta
         content.add(label);
  
-        //A馻de botones
-        JButton buttonR = new JButton("R醦ido");
+        //A帽ade botones
+        JButton buttonR = new JButton("R谩pido");
         buttonR.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				label.setText("Acci髇 r醦ida");
+				label.setText("Acci贸n r谩pida");
 			}
 		});
         content.add(buttonR);
@@ -69,7 +69,7 @@ public class Main extends JFrame {
 							Thread.sleep(3000);
 					        SwingUtilities.invokeLater(new Runnable() {
 					            public void run() {
-					            	label.setText("Acci髇 por Thread");
+					            	label.setText("Acci贸n por Thread");
 					            }
 					        });
 						} catch (InterruptedException e) {
@@ -94,7 +94,7 @@ public class Main extends JFrame {
 		@Override
 		protected String doInBackground() throws Exception {
 			Thread.sleep(3000);
-			return "Acci髇 por Worker!!!";
+			return "Acci贸n por Worker!!!";
 		}
 		@Override
 		protected void done() {
